@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Covid-19 App</title>
+    <Style>
+        body {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        #header {
+            width: 100%;
+            height: 100px;
+            background-color: salmon;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #form {
+            width: 50%;
+            height: 150px;
+            margin-top: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #label {
+            font-size: 23px;
+        }
+
+        #countryname {
+            height: 20px;
+        }
+
+        #searchbtn {
+            width: 70px;
+            height: 26px;
+        }
+
+        #result {
+            width: 50%;
+            height: 250px;
+            background-color: salmon;
+            display: flex;
+            justify-content:center;
+            align-items: center;
+        }
+    </Style>
+</head>
+
+<body>
+    <div id="header">
+        <div id="logo">
+            <h1>COVID-19 STATISTICS</h1>
+        </div>
+    </div>
+    <center>
+        <div id="form">
+            <label for="countryname" id="label">Country :</label>
+            <input type="text" id="countryname" name="countryname">
+            <br />
+            <button id="searchbtn">Search</button>
+        </div>
+        <div id="result">
+            
+            <div id="cases"></div><br/>
+            <div id="todaycases"></div><br/>
+            <div id="deaths"></div><br/>
+            <div id="todaydeaths"></div><br/>
+            <div id="recovered"></div><br/>
+            <div id="active"></div><br/>
+            <div id="critical"></div><br/>
+            
+        </div>
+    </center>
+</body>
+<Script>
+    var countryname = document.getElementById("countryname");
+    var searchbtn = document.getElementById("searchbtn");
+    var result = document.getElementById("result");
+
+    searchbtn.addEventListener("click", function (e) {
+        e.preventDefault();
+
+        let url = "https://coronavirus-19-api.herokuapp.com/countries/" + countryname.value;
+
+        fetch(url)//fetching the information using the given url.
+            .then((response) => {
+            console.log(response); //first then me it will return promise only not the response.
+            return response.json(); //returns the data in the json format.
+        })
+            .then((data)=>{
+                console.log(data); // second then me it will provide response required.
+                renderlist(data);
+            })
+            .catch(err => {
+                console.error(err); // for any errors.
+            });
+        }
+    );
+
+    function renderlist(data){
+        var html =`<div id="result">
+            <div id="cases">
+                    Cases :${data.cases} 
+            <div/>
+
+            <div id="todaycases">
+                    TodayCases:${data.todayCases}
+            <div/> 
+
+            <div id="deaths">
+                    Deaths: ${data.deaths}
+            <div/> 
+
+            <div id="todaydeaths">        
+                    TodayDeaths: ${data.todayDeaths}
+            <div/>
+
+            <div id="recovered">      
+                    Recovered: ${data.recovered}
+            <div/>
+
+            <div id="active">        
+                    Active: ${data.active}
+            <div/>
+
+            <div id="critical">
+                    Critical: ${data.critical}
+            <div/>
+
+                   <div/>`;
+
+                   result.innerHTML = html;
+                   countryname.value = "";
+    }
+</Script>
+
+</html>
